@@ -2,6 +2,8 @@ import express from "express";
 import connectDatabase from "./config/connectDatabase.js";
 import authRouter from "./routes/userRoute.js";
 import cors from "cors"
+import newsRouter from "./routes/apiRoute.js";
+
 
 
 const app = express();
@@ -14,6 +16,7 @@ app.get("/", (req, res) => {
   res.json(`hello world`);
 });
 app.use("/api/auth", authRouter);
+app.use('/api/news',newsRouter)
 
 app.listen(port, () => {
   try {
@@ -23,4 +26,4 @@ app.listen(port, () => {
     console.log(error);
   }
 });
- 
+  

@@ -43,7 +43,7 @@ export const signIn = async (req, res, next) => {
 };
 
 export const googleAuth = async (req, res, next) => {
-  const googleUser = await User.findOne({email:req.body.email});
+  const googleUser = await User.findOne({ email: req.body.email });
   try {
     if (googleUser) {
       const token = jwt.sign({ id: googleUser._id }, process.env.JWT);
@@ -56,8 +56,6 @@ export const googleAuth = async (req, res, next) => {
       const hashedPassword =
         Math.random().toString(36).slice(-5) +
         Math.random().toString(36).slice(-5);
-
-
 
       const googleAccount = await User.create({
         username: req.body.username + Math.floor(Math.random(1000) * 8000),
