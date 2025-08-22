@@ -3,8 +3,14 @@ import { app } from "../firebase";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { FaGoogle } from "react-icons/fa";
 import { serverUrl } from "../constant";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../redux/userSlice";
 
 const Oauth = () => {
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const signUpWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -16,10 +22,12 @@ const Oauth = () => {
         username: result.user.fullName,
         email: result.user.email,
       });
+      dispatch(setUser(response.data))
+      navigate("/");
       if (!response) {
         throw new Error(error);
       }
-      console.log(response)
+      console.log(response);
     } catch (error) {
       console.log("error signing up with google", error);
     }

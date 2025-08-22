@@ -1,6 +1,7 @@
-
+import { useSelector } from "react-redux";
 
 function Profile() {
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center pt-16">
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
@@ -22,6 +23,7 @@ function Profile() {
               type="email"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-black transition-colors"
               required
+              defaultValue={currentUser.email}
             />
           </div>
           <div>
@@ -32,6 +34,7 @@ function Profile() {
               type="text"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-black transition-colors"
               required
+              defaultValue={currentUser.username}
             />
           </div>
         </form>

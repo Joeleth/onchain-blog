@@ -20,17 +20,20 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = axios.post(`${serverUrl}/api/auth/sign-up`, {
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-      });
 
-      if (response.success === false) {
-        return data.message;
+    try {
+      const response = await axios.post(
+        `${serverUrl}/api/auth/sign-up`,
+        formData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (response.data.success === false) {
+        return response.data.message;
       }
-      dispatch(setUser());
+      console.log(dispatch(setUser(response.data)));
       navigate("/");
     } catch (error) {
       console.error("Error during sign up:", error);

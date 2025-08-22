@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Oauth from "../components/Oauth";
 import axios from "axios";
 import { serverUrl } from "../constant";
 
+
 const SignIn = () => {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({});
   const handleChange = (e) => {
     setFormData({
@@ -15,12 +17,14 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${serverUrl}/api/auth/sign-in`, {
+      const response = await axios.post(
+        `${serverUrl}/api/auth/sign-in`,
         formData,
-      });
-      if (!response) {
-        console.log(response.message);
-      }
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+   navigate('/')
     } catch (error) {
       console.log(error);
     }

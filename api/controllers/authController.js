@@ -1,4 +1,4 @@
-import bcrypt, { hashSync } from "bcrypt";
+import bcrypt from "bcrypt";
 import User from "../models/userModel.js";
 import mongoose from "mongoose";
 import validator from "validator";
@@ -11,14 +11,15 @@ export const signUp = async (req, res, next) => {
   }
   const { username, email, password } = req.body;
   try {
-    console.log(
-      await User.create({
-        username,
-        email,
-        password: await bcrypt.hash(password, 10),
-      })
-    );
-    res.status(200).json({ message: "user successfully created" });
+    // console.log(
+    const person = await User.create({
+      username,
+      email,
+      password: await bcrypt.hash(password, 10),
+    });
+    // );
+    const { password:pass, ...rest } = person._doc;
+    res.status(200).json(rest);
   } catch (error) {
     next("error creating user", error);
   }
