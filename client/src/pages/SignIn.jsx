@@ -3,26 +3,29 @@ import { Link, useNavigate } from "react-router-dom";
 import Oauth from "../components/Oauth";
 import axios from "axios";
 import { serverUrl } from "../constant";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/userSlice";
 
 const SignIn = () => {
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [formData, setFormData] = useState({});
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: [e.target.value],
-    });
-  };
+  // const handleChange = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.id]: [e.target.value],
+  //   });
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${serverUrl}/api/auth/sign-in`,
-        formData,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await axios.post(`${serverUrl}/api/auth/sign-in`, {
+        email,
+        password,
+      });
+      dispatch(setUser(response.data));
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -43,7 +46,7 @@ const SignIn = () => {
               Email Address
             </label>
             <input
-              onChange={handleChange}
+              onChange={(e) => setEmail(e.target.value)}
               id="email"
               type="email"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-black transition-colors"
@@ -57,7 +60,7 @@ const SignIn = () => {
               Password
             </label>
             <input
-              onChange={handleChange}
+              onChange={(e) => setPassword(e.target.value)}
               id="password"
               type="password"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-black transition-colors"
@@ -67,7 +70,6 @@ const SignIn = () => {
           </div>
           {/* Submit Button */}
           <button
-            onChange={handleSubmit}
             type="submit"
             className="w-full bg-black text-white py-2 px-4 rounded-lg  transition-colors font-medium"
           >

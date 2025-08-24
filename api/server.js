@@ -26,9 +26,9 @@ app.listen(port, () => {
   try {
     console.log(`server running on http://localhost:${port}`);
     connectDatabase();
-// deleteDatabase()
+    // deleteDatabase()
   } catch (error) {
     console.log(error);
   }
 });
-        
+  

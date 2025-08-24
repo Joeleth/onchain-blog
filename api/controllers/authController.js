@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 import User from "../models/userModel.js";
 import mongoose from "mongoose";
 import validator from "validator";
@@ -14,7 +14,7 @@ export const signUp = async (req, res, next) => {
     const person = await User.create({
       username,
       email,
-      password: await bcrypt.hash(password, 10),
+      password: await bcryptjs.hash(password, 10),
     });
 
     const { password: pass, ...rest } = person._doc;
@@ -23,17 +23,18 @@ export const signUp = async (req, res, next) => {
     next(error);
   }
 };
-
+ 
 export const signIn = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const validUser = await User.findOne({ email });
     if (!validUser) return next("wrong email");
-    const validPassword = await bcrypt.compare(password, validUser.password);
-    console.log(password,validUser.password)
-    if (!validPassword) return next("wrong password");
+
+    const validPassword = await bcryptjs.compare(password, validUser.password);
+    console.log(password, validUser.password);
+    if (!validPassword) return next(new Error("Invalid password"));
     const token = jwt.sign({ id: validUser._id }, process.env.JWT);
-    const { Password: pass, ...rest } = validUser._doc; 
+    const { password: pass, ...rest } = validUser._doc;
     res
       .cookie("access_token", token, { httpOnly: true })
       .status(200)
@@ -58,7 +59,7 @@ export const googleAuth = async (req, res, next) => {
         Math.random().toString(36).slice(-5) +
         Math.random().toString(36).slice(-5);
 
-      const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
+      const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
       const googleAccount = await User.create({
         username: "xbt" + Math.floor(Math.random(800) * 1000),
         password: hashedPassword,
@@ -72,7 +73,6 @@ export const googleAuth = async (req, res, next) => {
         .status(200)
         .json(rest);
     }
-
   } catch (error) {
     next(error);
   }
