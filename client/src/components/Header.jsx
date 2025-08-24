@@ -1,17 +1,35 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 
+import axios from "axios";
 import { useSelector } from "react-redux";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
+import { serverUrl } from "../constant";
 
 const Navbar = () => {
   const currentUser = useSelector((state) => state.user.currentUser);
-  // const [searchTerm, setSearchTerm] = useState("");
-  // const [display, setDisplay] = useState(article);
+
+
+  const [display, setDisplay] = useState([]);
   const navigate = useNavigate();
 
- 
 
 
+  const handleSearchchange = async (e) => {
+    try {
+      const response = await axios.get(`${serverUrl}/api/news/onchain-news`);
+      const data = response.data.articles;
+
+      const filterData = data.filter((item) => {
+        return item.title.toLowerCase().includes(value.toLowerCase());
+      });
+      setDisplay(filterData);
+      console.log(display);
+      return filterData;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <nav className="fixed top-0 w-full bg-black text-white z-50 shadow-md">
@@ -25,7 +43,7 @@ const Navbar = () => {
         </Link>
 
         {/* Search Bar */}
-        <form  className="relative">
+        <form className="relative">
           <span className="absolute left-2 top-1/2 transform -translate-y-1/2">
             <svg
               className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 group-hover:text-white transition-colors"
@@ -47,28 +65,31 @@ const Navbar = () => {
             placeholder="Search..."
             className="w-32 sm:w-36 lg:w-40 pl-7 pr-3 py-1.5 sm:py-2 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:border-white focus:ring-1 focus:ring-white/20 transition-all text-xs sm:text-sm"
             aria-label="Search"
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchchange}
           />
         </form>
 
         {/* Sign In / User Avatar */}
-        <Link to="/sign-in">
-          {currentUser ? (
+
+        {currentUser ? (
+          <Link to={"/profile"}>
             <img
               src={currentUser.avatar}
               alt="User profile"
               className="rounded-full h-6 w-6 sm:h-7 sm:w-7 object-cover border border-gray-700"
               onError={(e) => (e.target.src = "/fallback-avatar.png")}
             />
-          ) : (
+          </Link>
+        ) : (
+          <Link to={"/sign-in"}>
             <button
               className="px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-white text-xs sm:text-sm font-medium hover:bg-white hover:text-black transition-colors duration-200"
               aria-label="Sign in"
             >
               Sign In
             </button>
-          )}
-        </Link>
+          </Link>
+        )}
       </div>
     </nav>
   );

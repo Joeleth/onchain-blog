@@ -94,26 +94,13 @@ const SignUp = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition-colors font-medium"
+            className="w-full bg-black text-white py-2 px-4 rounded-lg  transition-colors font-medium"
           >
             Sign Up
           </button>
 
-          {/* Helper Links */}
-          <div className="flex justify-between items-center text-sm">
-            <a
-              href="#"
-              className="text-gray-600 hover:text-black transition-colors"
-            >
-              Forgot Password?
-            </a>
-            <a
-              href="#"
-              className="text-gray-600 hover:text-black transition-colors"
-            >
-              Create Account
-            </a>
-          </div>
+
+         
           <Oauth />
         </form>
       </div>

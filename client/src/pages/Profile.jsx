@@ -1,7 +1,25 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { serverUrl } from "../constant";
+import { useNavigate } from "react-router-dom";
+import { setUser } from "../redux/userSlice";
 
 function Profile() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
+
+  const handleSignOut = async () => {
+    try {
+      await axios.post(`${serverUrl}/api/auth/sign-out`);
+      localStorage.removeItem("Access_Token");
+      dispatch(setUser(null));
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center pt-16">
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
@@ -11,7 +29,7 @@ function Profile() {
         <form className="space-y-4">
           <img
             className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2 mb-3"
-            src="https://i2.seadn.io/base/0x7e72abdf47bd21bf0ed6ea8cb8dad60579f3fb50/cf0072d053df3b408fe3c597280fec/39cf0072d053df3b408fe3c597280fec.png?w=350"
+            src={currentUser.avatar}
             alt="profile"
           />
 
@@ -38,6 +56,12 @@ function Profile() {
             />
           </div>
         </form>
+        <h6
+          onClick={handleSignOut}
+          className="text-red-700 transition-colors mt-2 cursor-pointer"
+        >
+          sign out
+        </h6>
       </div>
     </div>
   );

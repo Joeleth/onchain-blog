@@ -11,17 +11,16 @@ export const signUp = async (req, res, next) => {
   }
   const { username, email, password } = req.body;
   try {
-    // console.log(
     const person = await User.create({
       username,
       email,
       password: await bcrypt.hash(password, 10),
     });
-    // );
-    const { password:pass, ...rest } = person._doc;
+
+    const { password: pass, ...rest } = person._doc;
     res.status(200).json(rest);
   } catch (error) {
-    next("error creating user", error);
+    next(error);
   }
 };
 
@@ -30,10 +29,11 @@ export const signIn = async (req, res, next) => {
   try {
     const validUser = await User.findOne({ email });
     if (!validUser) return next("wrong email");
-    const validPassword = bcrypt.compareSync(password, validUser.password);
+    const validPassword = await bcrypt.compare(password, validUser.password);
+    console.log(password,validUser.password)
     if (!validPassword) return next("wrong password");
     const token = jwt.sign({ id: validUser._id }, process.env.JWT);
-    const { Password: pass, ...rest } = validUser._doc;
+    const { Password: pass, ...rest } = validUser._doc; 
     res
       .cookie("access_token", token, { httpOnly: true })
       .status(200)
@@ -44,8 +44,8 @@ export const signIn = async (req, res, next) => {
 };
 
 export const googleAuth = async (req, res, next) => {
-  const googleUser = await User.findOne({ email: req.body.email });
   try {
+    const googleUser = await User.findOne({ email: req.body.email });
     if (googleUser) {
       const token = jwt.sign({ id: googleUser._id }, process.env.JWT);
       const { password: pass, ...rest } = googleUser._doc;
@@ -54,12 +54,13 @@ export const googleAuth = async (req, res, next) => {
         .status(200)
         .json(rest);
     } else {
-      const hashedPassword =
+      const generatedPassword =
         Math.random().toString(36).slice(-5) +
         Math.random().toString(36).slice(-5);
 
+      const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
       const googleAccount = await User.create({
-        username: req.body.username + Math.floor(Math.random(1000) * 8000),
+        username: "xbt" + Math.floor(Math.random(800) * 1000),
         password: hashedPassword,
         email: req.body.email,
       });
@@ -71,8 +72,9 @@ export const googleAuth = async (req, res, next) => {
         .status(200)
         .json(rest);
     }
+
   } catch (error) {
-    console.log("cannot sign in with google", error);
+    next(error);
   }
 };
 
@@ -81,6 +83,6 @@ export const signOut = (req, res, next) => {
     res.clearCookie("Access_Token");
     res.json("user successfully signed out");
   } catch (error) {
-    console.log(`can't sign user out`, error);
+    next(error);
   }
 };

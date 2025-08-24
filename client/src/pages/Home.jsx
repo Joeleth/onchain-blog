@@ -1,26 +1,30 @@
 import React, { useState, useEffect } from "react";
+
 import axios from "axios";
 import { serverUrl } from "../constant";
 import Loader from "../components/Loading";
+import { useSearchParams } from "react-router-dom";
 
 const Home = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [allArticles, setAllArticles] = useState([]);
+  const [filteredArticles, setFilteredArticles] = useState([]);
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("search") || "";
 
-  const changeTitle = (value) => {
-    const filterData = articles.filter((item) => {
-      return item.title === value;
-    });
-    setDisplay(filterData);
+  const fetchArticles = async () => {
+    try {
+      const response = await axios.get(`${serverUrl}/api/news/onchain-news`);
+      const data = response.data.articles;
+      setAllArticles(data);
+      setFilteredArticles(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-
-
-
-
-
-
+  fetchArticles();
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -31,6 +35,8 @@ const Home = () => {
         }
 
         setArticles(response.data.articles);
+        const data = response.data.articles;
+        console.log(data);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -43,7 +49,7 @@ const Home = () => {
 
   if (loading)
     return (
-      <div className="place-items-center h-screen mt-100">
+      <div className="grid place-items-center h-screen ">
         <Loader />
       </div>
     );
@@ -94,3 +100,4 @@ const Home = () => {
 };
 
 export default Home;
+// export {changeTitle}

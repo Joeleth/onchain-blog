@@ -22,7 +22,7 @@ const Oauth = () => {
         username: result.user.fullName,
         email: result.user.email,
       });
-      dispatch(setUser(response.data))
+      dispatch(setUser(response.data));
       navigate("/");
       if (!response) {
         throw new Error(error);
@@ -36,7 +36,7 @@ const Oauth = () => {
   return (
     <button
       onClick={signUpWithGoogle}
-      className="inline-flex items-center justify-center w-full px-6 py-3 bg-white text-black border border-gray-400 rounded-lg hover:bg-gray-100 transition-colors"
+      className="inline-flex items-center justify-center w-full px-6 py-3 bg-white text-black border border-gray-400 rounded-lg  transition-colors"
     >
       <FaGoogle className="text-2xl mr-2" style={{ color: "#4285F4" }} />
       <span className="text-lg font-medium">Continue with Google</span>

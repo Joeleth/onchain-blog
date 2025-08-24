@@ -4,9 +4,8 @@ import Oauth from "../components/Oauth";
 import axios from "axios";
 import { serverUrl } from "../constant";
 
-
 const SignIn = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({});
   const handleChange = (e) => {
     setFormData({
@@ -24,7 +23,7 @@ const SignIn = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-   navigate('/')
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -68,8 +67,9 @@ const SignIn = () => {
           </div>
           {/* Submit Button */}
           <button
+            onChange={handleSubmit}
             type="submit"
-            className="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition-colors font-medium"
+            className="w-full bg-black text-white py-2 px-4 rounded-lg  transition-colors font-medium"
           >
             Sign In
           </button>
