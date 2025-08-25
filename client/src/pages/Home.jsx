@@ -1,30 +1,12 @@
 import React, { useState, useEffect } from "react";
-
 import axios from "axios";
 import { serverUrl } from "../constant";
 import Loader from "../components/Loading";
-import { useSearchParams } from "react-router-dom";
 
-const Home = () => {
+const Home = ({ filteredArticles }) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [allArticles, setAllArticles] = useState([]);
-  const [filteredArticles, setFilteredArticles] = useState([]);
-  const [searchParams] = useSearchParams();
-  const searchTerm = searchParams.get("search") || "";
-
-  const fetchArticles = async () => {
-    try {
-      const response = await axios.get(`${serverUrl}/api/news/onchain-news`);
-      const data = response.data.articles;
-      setAllArticles(data);
-      setFilteredArticles(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  fetchArticles();
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -35,8 +17,7 @@ const Home = () => {
         }
 
         setArticles(response.data.articles);
-        const data = response.data.articles;
-        console.log(data);
+
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -47,18 +28,21 @@ const Home = () => {
     fetchNews();
   }, []);
 
+  const articlesToRender =
+    filteredArticles.length > 0 ? filteredArticles : articles;
+
   if (loading)
     return (
-      <div className="grid place-items-center h-screen ">
+      <div className="place-items-center h-screen mt-100">
         <Loader />
       </div>
     );
-  //   if (error) return <div>Error: {error}</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-4 sm:py-6 md:py-8 mt-8 sm:mt-12 lg:mt-16 max-w-7xl">
       <ul className="space-y-4 sm:space-y-6 md:space-y-8">
-        {articles.map((article, index) => (
+        {articlesToRender.map((article, index) => (
           <li
             key={index}
             className="border-b pb-4 sm:pb-6 md:pb-8 last:border-b-0 flex flex-row items-stretch"
@@ -100,4 +84,3 @@ const Home = () => {
 };
 
 export default Home;
-// export {changeTitle}

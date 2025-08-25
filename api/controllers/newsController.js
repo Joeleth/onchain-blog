@@ -12,6 +12,6 @@ export const newsApi = async (req, res, next) => {
     );
     res.status(200).json(response.data);
   } catch (error) {
-    next("error fetching data", error);
+    throw new Error(error);
   }
 };

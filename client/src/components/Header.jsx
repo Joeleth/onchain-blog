@@ -1,33 +1,26 @@
-import { Link, useNavigate} from "react-router-dom";
-
+import { Link} from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-
+import { useState } from "react";
 import { serverUrl } from "../constant";
 
-const Navbar = () => {
+const Navbar = ({ setFilteredArticles }) => {
   const currentUser = useSelector((state) => state.user.currentUser);
-
-
-  const [display, setDisplay] = useState([]);
-  const navigate = useNavigate();
-
-
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearchchange = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.get(`${serverUrl}/api/news/onchain-news`);
       const data = response.data.articles;
 
-      const filterData = data.filter((item) => {
-        return item.title.toLowerCase().includes(value.toLowerCase());
-      });
-      setDisplay(filterData);
-      console.log(display);
-      return filterData;
+      const filterData = data.filter((item) =>
+        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      setFilteredArticles(filterData);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching articles:", error);
     }
   };
 
@@ -43,7 +36,7 @@ const Navbar = () => {
         </Link>
 
         {/* Search Bar */}
-        <form className="relative">
+        <form className="relative" onSubmit={handleSearchchange}>
           <span className="absolute left-2 top-1/2 transform -translate-y-1/2">
             <svg
               className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 group-hover:text-white transition-colors"
@@ -65,7 +58,7 @@ const Navbar = () => {
             placeholder="Search..."
             className="w-32 sm:w-36 lg:w-40 pl-7 pr-3 py-1.5 sm:py-2 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:border-white focus:ring-1 focus:ring-white/20 transition-all text-xs sm:text-sm"
             aria-label="Search"
-            onChange={handleSearchchange}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </form>
 

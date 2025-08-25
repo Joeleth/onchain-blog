@@ -99,8 +99,6 @@ const SignUp = () => {
             Sign Up
           </button>
 
-
-         
           <Oauth />
         </form>
       </div>
