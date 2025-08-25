@@ -4,10 +4,13 @@ import authRouter from "./routes/userRoute.js";
 import cors from "cors";
 import newsRouter from "./routes/apiRoute.js";
 import User from "./models/userModel.js";
+import cookieParser from "cookie-parser";
+
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
 
 const port = process.env.PORT || 3000;
 
