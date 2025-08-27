@@ -1,5 +1,4 @@
 import axios from "axios";
-import "dotenv/config";
 
 export const newsApi = async (req, res, next) => {
   const fromDate = new Date();
@@ -12,6 +11,8 @@ export const newsApi = async (req, res, next) => {
     );
     res.status(200).json(response.data);
   } catch (error) {
+    console.log(error);
+
     throw new Error(error);
   }
 };

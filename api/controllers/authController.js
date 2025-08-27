@@ -1,9 +1,8 @@
 import bcryptjs from "bcryptjs";
 import User from "../models/userModel.js";
-import mongoose from "mongoose";
+
 import validator from "validator";
 import jwt from "jsonwebtoken";
-import "dotenv/config";
 
 export const signUp = async (req, res, next) => {
   if (validator.isEmail(req.body.email) === false) {
@@ -23,7 +22,7 @@ export const signUp = async (req, res, next) => {
     next(error);
   }
 };
- 
+
 export const signIn = async (req, res, next) => {
   const { email, password } = req.body;
   try {
