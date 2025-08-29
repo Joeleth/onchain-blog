@@ -1,18 +1,35 @@
 import axios from "axios";
+import Post from "../models/postModel.js";
 
 export const newsApi = async (req, res, next) => {
-  const fromDate = new Date();
-  fromDate.setDate(fromDate.getDate() - 7);
-  const formattedFromDate = fromDate.toISOString().split("T")[0];
-
   try {
-    const response = await axios.get(
-      `https://newsapi.org/v2/everything?q=crypto&from=${formattedFromDate}&sortBy=publishedAt&apiKey=${process.env.NEWS_API_KEY}`
-    );
-    res.status(200).json(response.data);
+    const allPost = await Post.find();
+    res.status(200).json(allPost);
+    console.log(allPost);
   } catch (error) {
     console.log(error);
-
-    throw new Error(error);
   }
 };
+
+export const createPost = async (req, res, next) => {
+  try {
+    const newPost = await Post.create({
+      image: req.body.image,
+      title: req.body.title,
+      summary: req.body.summary,
+    });
+    res.status(200);
+    console.log(newPost);
+    res.status(200).json({ message: "post created successfully" });
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+};
+
+// export const fullPost = async (req, res, next) => {
+//   try {
+//     await Post.findById(req);
+//   } catch (error) {
+//     res.status(401).json({ message: error.message });
+//   }
+// };

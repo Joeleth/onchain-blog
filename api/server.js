@@ -6,6 +6,7 @@ import cors from "cors";
 import newsRouter from "./routes/apiRoute.js";
 import User from "./models/userModel.js";
 import cookieParser from "cookie-parser";
+import postRouter from './routes/postRoute.js'
 
 const app = express();
 app.use(express.json());
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api/auth", authRouter);
 app.use("/api/news", newsRouter);
+app.use("/api/post", postRouter);
 
 const deleteDatabase = async () => {
   await User.deleteMany({});
@@ -34,3 +36,4 @@ app.listen(port, () => {
     console.log(error);
   }
 });
+

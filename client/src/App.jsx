@@ -5,10 +5,12 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
+
 import { useState } from "react";
+import FullPost from "./pages/FullPost";
 
 function App() {
-const [filteredArticles, setFilteredArticles] = useState([]);
+  const [filteredArticles, setFilteredArticles] = useState([]);
   return (
     <BrowserRouter>
       <Header setFilteredArticles={setFilteredArticles} />
@@ -17,6 +19,7 @@ const [filteredArticles, setFilteredArticles] = useState([]);
           path="/"
           element={<Home filteredArticles={filteredArticles} />}
         />
+        <Route path="/post/:id" element={<FullPost />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route element={<PrivateRoute />}>
