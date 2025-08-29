@@ -26,7 +26,7 @@ const Navbar = ({ setFilteredArticles }) => {
 
   return (
     <nav className="fixed top-0 w-full bg-black text-white z-50 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 sm:gap-4 lg:gap-6 py-3 sm:py-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 sm:gap-4 lg:gap-6 py-3 sm:py-4 ">
         {/* Logo */}
         <Link
           to="/"

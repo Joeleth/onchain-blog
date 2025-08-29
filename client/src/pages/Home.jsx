@@ -44,7 +44,7 @@ const Home = ({ filteredArticles }) => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-4 sm:py-6 md:py-8 mt-8 sm:mt-12 lg:mt-16 max-w-7xl">
+    <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-4 sm:py-6 md:py-8 mt-11 sm:mt-12 lg:mt-16 max-w-7xl ">
       <ul className="space-y-4 sm:space-y-6 md:space-y-8">
         {articles.map((item) => (
           <li
@@ -65,7 +65,7 @@ const Home = ({ filteredArticles }) => {
                 </p>
               </div>
               <Link
-                to={`/post/${item._id}`} // Link to the dynamic route
+                to={`/post/${item._id}`} 
                 className="text-blue-500 hover:underline text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4 inline-block focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 Read more
