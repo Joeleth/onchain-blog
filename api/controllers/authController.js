@@ -30,7 +30,7 @@ export const signIn = async (req, res, next) => {
     if (!validUser) return next("wrong email");
 
     const validPassword = await bcryptjs.compare(password, validUser.password);
-    console.log(password, validUser.password);
+
     if (!validPassword) return next(new Error("Invalid password"));
     const token = jwt.sign({ id: validUser._id }, process.env.JWT);
     const { password: pass, ...rest } = validUser._doc;
@@ -39,7 +39,7 @@ export const signIn = async (req, res, next) => {
       .status(200)
       .json(rest);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 

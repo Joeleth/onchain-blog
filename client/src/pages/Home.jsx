@@ -4,7 +4,6 @@ import { serverUrl } from "../constant";
 import Loader from "../components/Loading";
 import { Link } from "react-router-dom";
 
-
 const Home = ({ filteredArticles }) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,8 +16,7 @@ const Home = ({ filteredArticles }) => {
         if (!response.data) {
           return `error fetching news`;
         }
-        const newsData = await response.data
-        console.log(newsData)
+        const newsData = await response.data;
 
         setArticles(response.data);
 
@@ -65,7 +63,7 @@ const Home = ({ filteredArticles }) => {
                 </p>
               </div>
               <Link
-                to={`/post/${item._id}`} 
+                to={`/post/${item._id}`}
                 className="text-blue-500 hover:underline text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4 inline-block focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 Read more
