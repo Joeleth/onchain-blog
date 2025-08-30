@@ -4,7 +4,7 @@ import { serverUrl } from "../constant";
 import Loader from "../components/Loading";
 import { Link } from "react-router-dom";
 
-const Home = ({ filteredArticles }) => {
+const Home = ({ searchTerm }) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,8 +30,14 @@ const Home = ({ filteredArticles }) => {
     fetchNews();
   }, []);
 
-  // const articlesToRender =
-  //   filteredArticles.length > 0 ? filteredArticles : articles;
+ const filteredArticles = articles.filter(
+   (article) =>
+     article &&
+     article.title &&
+     article.title.toLowerCase().includes(searchTerm?.toLowerCase() || "")
+ );
+
+  const articlesToRender = searchTerm ? filteredArticles : articles;
 
   if (loading)
     return (
@@ -44,7 +50,7 @@ const Home = ({ filteredArticles }) => {
   return (
     <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-4 sm:py-6 md:py-8 mt-11 sm:mt-12 lg:mt-16 max-w-7xl ">
       <ul className="space-y-4 sm:space-y-6 md:space-y-8">
-        {articles.map((item) => (
+        {articlesToRender.map((item) => (
           <li
             key={item._id}
             className="border-b pb-4 sm:pb-6 md:pb-8 last:border-b-0 flex flex-row items-stretch"
@@ -57,6 +63,10 @@ const Home = ({ filteredArticles }) => {
                 <p className="text-gray-600 text-xs sm:text-sm md:text-base mt-1 sm:mt-2 md:mt-3 line-clamp-3">
                   {item.summary}
                 </p>
+                <p className="text-xs sm:text-sm text-gray-800 mt-1 sm:mt-2">
+                  <strong>Author: </strong>
+                  joel
+                </p>
                 <p className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">
                   <strong>Published:</strong>
                   {new Date(item.createdAt).toLocaleDateString()}
@@ -68,7 +78,6 @@ const Home = ({ filteredArticles }) => {
               >
                 Read more
               </Link>
-           
             </div>
             <div className="w-3/10 h-39">
               <img

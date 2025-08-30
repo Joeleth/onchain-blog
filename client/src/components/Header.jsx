@@ -1,29 +1,21 @@
 import { Link } from "react-router-dom";
-import axios from "axios";
+
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { serverUrl } from "../constant";
 
-const Navbar = ({ setFilteredArticles }) => {
+const Navbar = ({ setSearchTerm }) => {
   const currentUser = useSelector((state) => state.user.currentUser);
-  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleSearchchange = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.get(`${serverUrl}/api/news/onchain-news`);
-      const data = response.data.articles;
+  const [localSearchTerm, setLocalSearchTerm] = useState("");
 
-      const filterData = data.filter((item) =>
-        item.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-
-      setFilteredArticles(filterData);
-    } catch (error) {
-      console.error("Error fetching articles:", error);
-    }
+  const handleSearchChange = async (e) => {
+    const value = e.target.value;
+    setLocalSearchTerm(value);
+    setSearchTerm(value);
   };
-
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+  };
   return (
     <nav className="fixed top-0 w-full bg-black text-white z-50 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 sm:gap-4 lg:gap-6 py-3 sm:py-4 ">
@@ -36,7 +28,7 @@ const Navbar = ({ setFilteredArticles }) => {
         </Link>
 
         {/* Search Bar */}
-        <form className="relative" onSubmit={handleSearchchange}>
+        <form className="relative" onSubmit={handleFormSubmit}>
           <span className="absolute left-2 top-1/2 transform -translate-y-1/2">
             <svg
               className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 group-hover:text-white transition-colors"
@@ -58,7 +50,8 @@ const Navbar = ({ setFilteredArticles }) => {
             placeholder="Search..."
             className="w-32 sm:w-36 lg:w-40 pl-7 pr-3 py-1.5 sm:py-2 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:border-white focus:ring-1 focus:ring-white/20 transition-all text-xs sm:text-sm"
             aria-label="Search"
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={localSearchTerm}
+            onChange={handleSearchChange}
           />
         </form>
 

@@ -10,15 +10,13 @@ import { useState } from "react";
 import FullPost from "./pages/FullPost";
 
 function App() {
-  const [filteredArticles, setFilteredArticles] = useState([]);
+   const [searchTerm, setSearchTerm] = useState(""); 
+
   return (
     <BrowserRouter>
-      <Header setFilteredArticles={setFilteredArticles} />
+      <Header setSearchTerm={setSearchTerm} />
       <Routes>
-        <Route
-          path="/"
-          element={<Home filteredArticles={filteredArticles} />}
-        />
+        <Route path="/" element={<Home searchTerm={searchTerm} />} />
         <Route path="/post/:id" element={<FullPost />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
