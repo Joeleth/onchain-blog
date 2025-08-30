@@ -68,16 +68,9 @@ const Home = ({ filteredArticles }) => {
               >
                 Read more
               </Link>
-              {/* <a
-                href={article.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4 inline-block focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Read more
-              </a> */}
+           
             </div>
-            <div className="w-3/10 h-30">
+            <div className="w-3/10 h-39">
               <img
                 src={item.image}
                 alt={item.title || "Article image"}
