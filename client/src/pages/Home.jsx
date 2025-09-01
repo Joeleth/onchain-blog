@@ -29,7 +29,7 @@ const Home = ({ searchTerm }) => {
 
     fetchNews();
   }, []);
-
+ 
  const filteredArticles = articles.filter(
    (article) =>
      article &&
